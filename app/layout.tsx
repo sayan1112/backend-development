@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   generator: "v0.app",
 }
 
+import { CustomCursor } from "@/components/ui/custom-cursor"
+import { ScrollProgress } from "@/components/ui/scroll-progress"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -20,7 +23,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased`}>
+        <CustomCursor />
+        <ScrollProgress />
+        {children}
+      </body>
     </html>
   )
 }

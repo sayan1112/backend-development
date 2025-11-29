@@ -1,0 +1,642 @@
+[00:00:00.803] Server  WARN     ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:00.877] Server  LOG      ✓ Ready in 680ms
+[00:00:05.095] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:05.227] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:08.503] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:08.829] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468323"
+                        >
+                  ...
+
+[00:00:24.626] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:24.958] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:00:25.027] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468324"
+                        >
+                          <body
++                           className="inter_5901b7c6-module__ec5Qua__className antialiased"
+-                           className="inter_5901b7c6-module__ec5Qua__className antialiased antigravity-scroll-lock"
+                          >
+                  ...
+
+[00:00:33.623] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:00:35.829] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:00:43.498] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:00:58.421] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:09:50.085] Server  ERROR    ⨯ ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/services/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:09:50.099] Server  ERROR    ⨯ ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/products/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:09:50.108] Server  ERROR    ⨯ ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/products/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:09:50.109] Server  ERROR    ⨯ ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/products/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:09:50.124] Server  ERROR    ⨯ ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/services/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:09:50.127] Server  ERROR    ⨯ ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/requests/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:09:50.132] Server  ERROR    ⨯ ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/requests/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:09:50.133] Server  LOG      ✓ Compiled in 480ms
+[00:09:50.259] Browser ERROR   ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/products/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:09:50.297] Browser ERROR   ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/products/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:09:50.839] Browser ERROR   ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/products/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:09:50.840] Browser ERROR   ./hacathon/backend-development/lib/supabase/server.ts:8:70
+Module not found: Can't resolve './sample-data'
+   6 |
+   7 |   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+>  8 |     const { sampleProducts, sampleServices, sampleRequests } = await import('./sample-data')
+     |                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+   9 |     
+  10 |     let currentTable = ''
+  11 |     let currentData: any[] = []
+
+Import trace:
+  Server Component:
+    ./hacathon/backend-development/lib/supabase/server.ts
+    ./hacathon/backend-development/app/products/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:10:02.030] Server  LOG      ✓ Compiled in 237ms
+[00:10:03.127] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:10:24.531] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:24.982] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/products" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468325"
+                        >
+                  ...
+
+[00:10:48.295] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:10:48.297] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:10:48.298] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:10:48.298] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:10:48.298] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:10:48.299] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:10:48.505] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:48.639] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/services" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468326"
+                        >
+                  ...
+
+[00:10:48.639] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:11:02.013] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:11:02.018] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:11:02.024] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:11:02.037] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:11:02.041] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:11:02.043] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:11:02.421] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:02.626] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/services" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468327"
+                        >
+                  ...
+
+[00:11:02.626] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:11:11.185] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:11.360] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/requests" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468328"
+                        >
+                  ...
+
+[00:12:06.837] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:12:06.838] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:12:06.838] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:12:06.839] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:12:06.840] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:12:06.841] Server  ERROR    ⨯ TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:12:07.235] Browser ERROR   uncaughtError: TypeError: Cannot read properties of undefined (reading 'toLocaleString')
+[00:12:27.529] Server  LOG      ✓ Compiled in 98ms
+[00:12:30.066] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:12:30.073] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:12:30.202] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/services" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468326"
+                        >
+                  ...
+
+[00:12:30.202] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:12:30.338] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/services" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468327"
+                        >
+                  ...
+
+[00:12:30.427] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/services" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468328"
+                        >
+                  ...
+
+[00:12:43.738] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:12:44.234] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/services" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/hacathon/...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="dark"
+-                         data-jetski-tab-id="633468329"
+                        >
+                  ...
+
+[00:15:36.141] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:16:13.459] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:16:34.628] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:18:34.175] Server  LOG      ✓ Compiled in 240ms
+[00:18:58.507] Server  LOG      ✓ Compiled in 44ms
+[00:18:58.891] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:18:58.992] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:19:32.113] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:22:42.921] Server  LOG      ✓ Compiled in 73ms
+[00:22:48.714] Server  LOG      ✓ Compiled in 17ms
+[00:23:08.521] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:23:15.632] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:23:16.140] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:23:56.538] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:24:03.699] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:24:21.217] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:58:37.744] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:58:52.813] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:59:10.313] Browser LOG     THREE.WebGLRenderer: Context Lost.
+[00:59:36.989] Browser LOG     THREE.WebGLRenderer: Context Lost.

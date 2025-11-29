@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle } from "lucide-react"
 
+// ...existing code...
+// Supabase project URL (required)
+const SUPABASE_URL = "https://arikeqasjdgilltgiyyu.supabase.co"
+// ...existing code...
+
 export default function AuthErrorPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -25,7 +30,7 @@ export default function AuthErrorPage() {
             <CardDescription>Something went wrong during authentication. Please try again.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Link href="/auth/login" className="block">
+            <Link href="/auth/login" className="block" data-supabase-url={SUPABASE_URL}>
               <Button className="w-full bg-foreground text-background hover:bg-foreground/90">Try Again</Button>
             </Link>
             <Link href="/" className="block">
