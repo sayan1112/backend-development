@@ -1,14 +1,17 @@
-import { createClient } from "@/lib/supabase/server"
+"use client"
+
+import { createClient } from "@/lib/supabase/client"
 import { Navbar } from "@/components/navbar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import Link from "next/link"
-import { notFound } from "next/navigation"
-import { ArrowLeft, MapPin, Clock, Star } from "lucide-react"
+import { notFound, useParams, useRouter } from "next/navigation"
+import { ArrowLeft, MapPin, Clock, Star, Loader2 } from "lucide-react"
 import { RespondToRequestButton } from "@/components/respond-to-request-button"
 import { AcceptResponseButton } from "@/components/accept-response-button"
+import { useEffect, useState } from "react"
 
 const urgencyColors = {
   low: "bg-secondary text-foreground",
@@ -17,32 +20,84 @@ const urgencyColors = {
   urgent: "bg-red-100 text-red-800",
 }
 
-export default async function RequestDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const { id } = await params
-  const supabase = await createClient()
+export default function RequestDetailPage() {
+  const params = useParams()
+  const id = params.id as string
+  const [request, setRequest] = useState<any>(null)
+  const [responses, setResponses] = useState<any[]>([])
+  const [user, setUser] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const supabase = createClient()
+  const router = useRouter()
 
-  const { data: request } = await supabase.from("requests").select("*, requester:profiles(*)").eq("id", id).single()
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        setUser(user)
 
-  if (!request) {
-    notFound()
+        const { data: requestData } = await supabase
+          .from("requests")
+          .select("*, requester:profiles(*)")
+          .eq("id", id)
+          .single()
+
+        if (!requestData) {
+          // In a real app we might redirect to 404, but for client-side we can just show not found state
+          setRequest(null)
+        } else {
+          setRequest(requestData)
+
+          // Get responses for this request
+          const { data: responsesData } = await supabase
+            .from("request_responses")
+            .select("*, responder:profiles(*)")
+            .eq("request_id", id)
+            .order("created_at", { ascending: false })
+          
+          setResponses(responsesData || [])
+        }
+      } catch (error) {
+        console.error("Error fetching request details:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (id) {
+      fetchData()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
   }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  if (!request) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-2xl font-bold mb-4">Request Not Found</h1>
+            <Link href="/requests">
+              <Button>Back to Requests</Button>
+            </Link>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   const isOwner = user?.id === request.requester_id
-
-  // Get responses for this request
-  const { data: responses } = await supabase
-    .from("request_responses")
-    .select("*, responder:profiles(*)")
-    .eq("request_id", id)
-    .order("created_at", { ascending: false })
-
   const userHasResponded = responses?.some((r) => r.responder_id === user?.id)
 
   const timeAgo = (date: string) => {
@@ -104,7 +159,7 @@ export default async function RequestDetailPage({
                     )}
                     <span className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      Posted {timeAgo(request.created_at)}
+                      {request.created_at && timeAgo(request.created_at)}
                     </span>
                   </div>
                 </CardContent>

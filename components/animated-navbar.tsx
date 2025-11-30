@@ -42,12 +42,13 @@ export function AnimatedNavbar() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event: string, session: any) => {
       setUser(session?.user ?? null)
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase.auth])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()

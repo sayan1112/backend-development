@@ -39,7 +39,7 @@ export default function SignUpPage() {
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -49,8 +49,26 @@ export default function SignUpPage() {
           },
         },
       })
+      
       if (error) throw error
-      router.push("/")
+      
+      if (data.user) {
+        // Create profile entry with verification and rating fields
+        await supabase.from("profiles").insert({
+          id: data.user.id,
+          email: email,
+          full_name: fullName,
+          is_verified: false, // New users start unverified
+          rating: 0.0,
+          total_reviews: 0,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        
+        // Show success message
+        alert(`Account created successfully! Welcome ${fullName}!`)
+        router.push("/")
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {

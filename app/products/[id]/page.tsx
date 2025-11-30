@@ -78,7 +78,7 @@ export default async function ProductDetailPage({
 
               <h1 className="text-3xl font-bold text-foreground mb-4">{product.title}</h1>
 
-              <p className="text-2xl font-bold text-foreground mb-6">₹{product.price.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-foreground mb-6">₹{product.price?.toLocaleString() ?? "0"}</p>
 
               <p className="text-muted-foreground mb-6 leading-relaxed">{product.description}</p>
 

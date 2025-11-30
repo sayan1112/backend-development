@@ -1,41 +1,62 @@
-import { createClient } from "@/lib/supabase/server"
+"use client"
+
+import { createClient } from "@/lib/supabase/client"
 import { Navbar } from "@/components/navbar"
 import { RequestCard } from "@/components/request-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Plus, Search } from "lucide-react"
+import { Plus, Search, Loader2 } from "lucide-react"
 import { REQUEST_CATEGORIES } from "@/lib/types"
 import type { Request } from "@/lib/types"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
-export default async function RequestsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string; urgency?: string; search?: string }>
-}) {
-  const params = await searchParams
-  const supabase = await createClient()
+export default function RequestsPage() {
+  const searchParams = useSearchParams()
+  const [requests, setRequests] = useState<Request[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const supabase = createClient()
 
-  let query = supabase
-    .from("requests")
-    .select("*, requester:profiles(*)")
-    .eq("status", "open")
-    .order("created_at", { ascending: false })
+  const category = searchParams.get("category")
+  const urgency = searchParams.get("urgency")
+  const search = searchParams.get("search")
 
-  if (params.category) {
-    query = query.eq("category", params.category)
-  }
+  useEffect(() => {
+    const fetchRequests = async () => {
+      setIsLoading(true)
+      try {
+        let query = supabase
+          .from("requests")
+          .select("*, requester:profiles(*)")
+          .eq("status", "open")
+          .order("created_at", { ascending: false })
 
-  if (params.urgency) {
-    query = query.eq("urgency", params.urgency)
-  }
+        if (category) {
+          query = query.eq("category", category)
+        }
 
-  if (params.search) {
-    query = query.ilike("title", `%${params.search}%`)
-  }
+        if (urgency) {
+          query = query.eq("urgency", urgency)
+        }
 
-  const { data: requests } = await query
+        if (search) {
+          query = query.ilike("title", `%${search}%`)
+        }
+
+        const { data } = await query
+        setRequests(data || [])
+      } catch (error) {
+        console.error("Error fetching requests:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchRequests()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, urgency, search])
 
   const urgencyLevels = ["low", "medium", "high", "urgent"]
 
@@ -61,10 +82,18 @@ export default async function RequestsPage({
 
           {/* Search and Filters */}
           <div className="mb-8">
-            <form className="flex gap-3 mb-4">
+            <form className="flex gap-3 mb-4" onSubmit={(e) => e.preventDefault()}>
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input name="search" placeholder="Search requests..." defaultValue={params.search} className="pl-10" />
+                <Input 
+                  name="search" 
+                  placeholder="Search requests..." 
+                  defaultValue={search || ""} 
+                  className="pl-10"
+                  onChange={(e) => {
+                    // Simple debounce could be added here
+                  }}
+                />
               </div>
               <Button type="submit" variant="outline">
                 Search
@@ -76,22 +105,22 @@ export default async function RequestsPage({
               <span className="text-sm text-muted-foreground mr-2 self-center">Category:</span>
               <Link href="/requests">
                 <Badge
-                  variant={!params.category ? "default" : "outline"}
-                  className={`cursor-pointer ${!params.category ? "bg-foreground text-background" : ""}`}
+                  variant={!category ? "default" : "outline"}
+                  className={`cursor-pointer ${!category ? "bg-foreground text-background" : ""}`}
                 >
                   All
                 </Badge>
               </Link>
-              {REQUEST_CATEGORIES.map((category) => (
+              {REQUEST_CATEGORIES.map((cat) => (
                 <Link
-                  key={category}
-                  href={`/requests?category=${encodeURIComponent(category)}${params.urgency ? `&urgency=${params.urgency}` : ""}`}
+                  key={cat}
+                  href={`/requests?category=${encodeURIComponent(cat)}${urgency ? `&urgency=${urgency}` : ""}`}
                 >
                   <Badge
-                    variant={params.category === category ? "default" : "outline"}
-                    className={`cursor-pointer ${params.category === category ? "bg-foreground text-background" : ""}`}
+                    variant={category === cat ? "default" : "outline"}
+                    className={`cursor-pointer ${category === cat ? "bg-foreground text-background" : ""}`}
                   >
-                    {category}
+                    {cat}
                   </Badge>
                 </Link>
               ))}
@@ -100,10 +129,10 @@ export default async function RequestsPage({
             {/* Urgency Filters */}
             <div className="flex flex-wrap gap-2">
               <span className="text-sm text-muted-foreground mr-2 self-center">Urgency:</span>
-              <Link href={`/requests${params.category ? `?category=${params.category}` : ""}`}>
+              <Link href={`/requests${category ? `?category=${category}` : ""}`}>
                 <Badge
-                  variant={!params.urgency ? "default" : "outline"}
-                  className={`cursor-pointer ${!params.urgency ? "bg-foreground text-background" : ""}`}
+                  variant={!urgency ? "default" : "outline"}
+                  className={`cursor-pointer ${!urgency ? "bg-foreground text-background" : ""}`}
                 >
                   All
                 </Badge>
@@ -111,11 +140,11 @@ export default async function RequestsPage({
               {urgencyLevels.map((level) => (
                 <Link
                   key={level}
-                  href={`/requests?urgency=${level}${params.category ? `&category=${params.category}` : ""}`}
+                  href={`/requests?urgency=${level}${category ? `&category=${category}` : ""}`}
                 >
                   <Badge
-                    variant={params.urgency === level ? "default" : "outline"}
-                    className={`cursor-pointer ${params.urgency === level ? "bg-foreground text-background" : ""}`}
+                    variant={urgency === level ? "default" : "outline"}
+                    className={`cursor-pointer ${urgency === level ? "bg-foreground text-background" : ""}`}
                   >
                     {level.charAt(0).toUpperCase() + level.slice(1)}
                   </Badge>
@@ -125,7 +154,11 @@ export default async function RequestsPage({
           </div>
 
           {/* Requests List */}
-          {requests && requests.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : requests && requests.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {requests.map((request: Request) => (
                 <RequestCard key={request.id} request={request} />
@@ -138,7 +171,7 @@ export default async function RequestsPage({
               </div>
               <h3 className="text-lg font-medium text-foreground mb-2">No requests found</h3>
               <p className="text-muted-foreground mb-6">
-                {params.search || params.category || params.urgency
+                {search || category || urgency
                   ? "Try adjusting your filters"
                   : "Be the first to post a request!"}
               </p>

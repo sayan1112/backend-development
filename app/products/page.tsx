@@ -1,37 +1,57 @@
-import { createClient } from "@/lib/supabase/server"
+"use client"
+
+import { createClient } from "@/lib/supabase/client"
 import { Navbar } from "@/components/navbar"
 import { ProductCard } from "@/components/product-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Plus, Search } from "lucide-react"
+import { Plus, Search, Loader2 } from "lucide-react"
 import { PRODUCT_CATEGORIES } from "@/lib/types"
 import type { Product } from "@/lib/types"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
-export default async function ProductsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string; search?: string }>
-}) {
-  const params = await searchParams
-  const supabase = await createClient()
+export default function ProductsPage() {
+  const searchParams = useSearchParams()
+  const [products, setProducts] = useState<Product[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const supabase = createClient()
 
-  let query = supabase
-    .from("products")
-    .select("*, seller:profiles(*)")
-    .eq("status", "available")
-    .order("created_at", { ascending: false })
+  const category = searchParams.get("category")
+  const search = searchParams.get("search")
 
-  if (params.category) {
-    query = query.eq("category", params.category)
-  }
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true)
+      try {
+        let query = supabase
+          .from("products")
+          .select("*, seller:profiles(*)")
+          .eq("status", "available")
+          .order("created_at", { ascending: false })
 
-  if (params.search) {
-    query = query.ilike("title", `%${params.search}%`)
-  }
+        if (category) {
+          query = query.eq("category", category)
+        }
 
-  const { data: products } = await query
+        if (search) {
+          query = query.ilike("title", `%${search}%`)
+        }
+
+        const { data } = await query
+        setProducts(data || [])
+      } catch (error) {
+        console.error("Error fetching products:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchProducts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, search])
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,10 +75,19 @@ export default async function ProductsPage({
 
           {/* Search and Filters */}
           <div className="mb-8">
-            <form className="flex gap-3 mb-4">
+            <form className="flex gap-3 mb-4" onSubmit={(e) => e.preventDefault()}>
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input name="search" placeholder="Search products..." defaultValue={params.search} className="pl-10" />
+                <Input 
+                  name="search" 
+                  placeholder="Search products..." 
+                  defaultValue={search || ""} 
+                  className="pl-10"
+                  onChange={(e) => {
+                    // Simple debounce could be added here, but for now we'll rely on form submission or just URL updates if we wired it up
+                    // For a true client-side search with URL params, we'd need to update the router
+                  }}
+                />
               </div>
               <Button type="submit" variant="outline">
                 Search
@@ -68,19 +97,19 @@ export default async function ProductsPage({
             <div className="flex flex-wrap gap-2">
               <Link href="/products">
                 <Badge
-                  variant={!params.category ? "default" : "outline"}
-                  className={`cursor-pointer ${!params.category ? "bg-foreground text-background" : ""}`}
+                  variant={!category ? "default" : "outline"}
+                  className={`cursor-pointer ${!category ? "bg-foreground text-background" : ""}`}
                 >
                   All
                 </Badge>
               </Link>
-              {PRODUCT_CATEGORIES.map((category) => (
-                <Link key={category} href={`/products?category=${encodeURIComponent(category)}`}>
+              {PRODUCT_CATEGORIES.map((cat) => (
+                <Link key={cat} href={`/products?category=${encodeURIComponent(cat)}`}>
                   <Badge
-                    variant={params.category === category ? "default" : "outline"}
-                    className={`cursor-pointer ${params.category === category ? "bg-foreground text-background" : ""}`}
+                    variant={category === cat ? "default" : "outline"}
+                    className={`cursor-pointer ${category === cat ? "bg-foreground text-background" : ""}`}
                   >
-                    {category}
+                    {cat}
                   </Badge>
                 </Link>
               ))}
@@ -88,7 +117,11 @@ export default async function ProductsPage({
           </div>
 
           {/* Products Grid */}
-          {products && products.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : products && products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
@@ -101,7 +134,7 @@ export default async function ProductsPage({
               </div>
               <h3 className="text-lg font-medium text-foreground mb-2">No products found</h3>
               <p className="text-muted-foreground mb-6">
-                {params.search || params.category
+                {search || category
                   ? "Try adjusting your search or filters"
                   : "Be the first to list a product!"}
               </p>

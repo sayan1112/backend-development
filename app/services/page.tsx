@@ -1,37 +1,57 @@
-import { createClient } from "@/lib/supabase/server"
+"use client"
+
+import { createClient } from "@/lib/supabase/client"
 import { Navbar } from "@/components/navbar"
 import { ServiceCard } from "@/components/service-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { Plus, Search } from "lucide-react"
+import { Plus, Search, Loader2 } from "lucide-react"
 import { SERVICE_CATEGORIES } from "@/lib/types"
 import type { Service } from "@/lib/types"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
-export default async function ServicesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string; search?: string }>
-}) {
-  const params = await searchParams
-  const supabase = await createClient()
+export default function ServicesPage() {
+  const searchParams = useSearchParams()
+  const [services, setServices] = useState<Service[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const supabase = createClient()
 
-  let query = supabase
-    .from("services")
-    .select("*, provider:profiles(*)")
-    .eq("is_available", true)
-    .order("created_at", { ascending: false })
+  const category = searchParams.get("category")
+  const search = searchParams.get("search")
 
-  if (params.category) {
-    query = query.eq("category", params.category)
-  }
+  useEffect(() => {
+    const fetchServices = async () => {
+      setIsLoading(true)
+      try {
+        let query = supabase
+          .from("services")
+          .select("*, provider:profiles(*)")
+          .eq("is_available", true)
+          .order("created_at", { ascending: false })
 
-  if (params.search) {
-    query = query.ilike("title", `%${params.search}%`)
-  }
+        if (category) {
+          query = query.eq("category", category)
+        }
 
-  const { data: services } = await query
+        if (search) {
+          query = query.ilike("title", `%${search}%`)
+        }
+
+        const { data } = await query
+        setServices(data || [])
+      } catch (error) {
+        console.error("Error fetching services:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchServices()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, search])
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,10 +75,18 @@ export default async function ServicesPage({
 
           {/* Search and Filters */}
           <div className="mb-8">
-            <form className="flex gap-3 mb-4">
+            <form className="flex gap-3 mb-4" onSubmit={(e) => e.preventDefault()}>
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input name="search" placeholder="Search services..." defaultValue={params.search} className="pl-10" />
+                <Input 
+                  name="search" 
+                  placeholder="Search services..." 
+                  defaultValue={search || ""} 
+                  className="pl-10"
+                  onChange={(e) => {
+                    // Simple debounce could be added here
+                  }}
+                />
               </div>
               <Button type="submit" variant="outline">
                 Search
@@ -68,19 +96,19 @@ export default async function ServicesPage({
             <div className="flex flex-wrap gap-2">
               <Link href="/services">
                 <Badge
-                  variant={!params.category ? "default" : "outline"}
-                  className={`cursor-pointer ${!params.category ? "bg-foreground text-background" : ""}`}
+                  variant={!category ? "default" : "outline"}
+                  className={`cursor-pointer ${!category ? "bg-foreground text-background" : ""}`}
                 >
                   All
                 </Badge>
               </Link>
-              {SERVICE_CATEGORIES.map((category) => (
-                <Link key={category} href={`/services?category=${encodeURIComponent(category)}`}>
+              {SERVICE_CATEGORIES.map((cat) => (
+                <Link key={cat} href={`/services?category=${encodeURIComponent(cat)}`}>
                   <Badge
-                    variant={params.category === category ? "default" : "outline"}
-                    className={`cursor-pointer ${params.category === category ? "bg-foreground text-background" : ""}`}
+                    variant={category === cat ? "default" : "outline"}
+                    className={`cursor-pointer ${category === cat ? "bg-foreground text-background" : ""}`}
                   >
-                    {category}
+                    {cat}
                   </Badge>
                 </Link>
               ))}
@@ -88,7 +116,11 @@ export default async function ServicesPage({
           </div>
 
           {/* Services Grid */}
-          {services && services.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : services && services.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service: Service) => (
                 <ServiceCard key={service.id} service={service} />
@@ -101,7 +133,7 @@ export default async function ServicesPage({
               </div>
               <h3 className="text-lg font-medium text-foreground mb-2">No services found</h3>
               <p className="text-muted-foreground mb-6">
-                {params.search || params.category
+                {search || category
                   ? "Try adjusting your search or filters"
                   : "Be the first to offer a service!"}
               </p>

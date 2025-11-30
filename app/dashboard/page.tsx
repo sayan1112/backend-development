@@ -1,5 +1,7 @@
-import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
+"use client"
+
+import { createClient } from "@/lib/supabase/client"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -7,77 +9,120 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import Link from "next/link"
-import { ShoppingBag, Sparkles, MessageSquare, Package, Calendar, TrendingUp, Plus } from "lucide-react"
+import { ShoppingBag, Sparkles, MessageSquare, Package, Calendar, TrendingUp, Plus, Loader2 } from "lucide-react"
 import { DashboardBookingActions } from "@/components/dashboard-booking-actions"
 import { DashboardOrderActions } from "@/components/dashboard-order-actions"
+import { useEffect, useState } from "react"
 
-export default async function DashboardPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ tab?: string }>
-}) {
-  const params = await searchParams
-  const supabase = await createClient()
+export default function DashboardPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [isLoading, setIsLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
+  const [products, setProducts] = useState<any[]>([])
+  const [services, setServices] = useState<any[]>([])
+  const [requests, setRequests] = useState<any[]>([])
+  const [incomingBookings, setIncomingBookings] = useState<any[]>([])
+  const [outgoingBookings, setOutgoingBookings] = useState<any[]>([])
+  const [incomingOrders, setIncomingOrders] = useState<any[]>([])
+  const [outgoingOrders, setOutgoingOrders] = useState<any[]>([])
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const supabase = createClient()
 
-  if (!user) {
-    redirect("/auth/login")
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+
+        if (!user) {
+          router.push("/auth/login")
+          return
+        }
+
+        setUser(user)
+
+        // Get user profile
+        const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+        setProfile(profile)
+
+        // Get user's products
+        const { data: products } = await supabase
+          .from("products")
+          .select("*")
+          .eq("seller_id", user.id)
+          .order("created_at", { ascending: false })
+        setProducts(products || [])
+
+        // Get user's services
+        const { data: services } = await supabase
+          .from("services")
+          .select("*")
+          .eq("provider_id", user.id)
+          .order("created_at", { ascending: false })
+        setServices(services || [])
+
+        // Get user's requests
+        const { data: requests } = await supabase
+          .from("requests")
+          .select("*")
+          .eq("requester_id", user.id)
+          .order("created_at", { ascending: false })
+        setRequests(requests || [])
+
+        // Get incoming bookings (as provider)
+        const { data: incomingBookings } = await supabase
+          .from("bookings")
+          .select("*, service:services(*), buyer:profiles(*)")
+          .eq("provider_id", user.id)
+          .order("created_at", { ascending: false })
+        setIncomingBookings(incomingBookings || [])
+
+        // Get outgoing bookings (as buyer)
+        const { data: outgoingBookings } = await supabase
+          .from("bookings")
+          .select("*, service:services(*), provider:profiles(*)")
+          .eq("buyer_id", user.id)
+          .order("created_at", { ascending: false })
+        setOutgoingBookings(outgoingBookings || [])
+
+        // Get incoming orders (as seller)
+        const { data: incomingOrders } = await supabase
+          .from("orders")
+          .select("*, product:products(*), buyer:profiles(*)")
+          .eq("seller_id", user.id)
+          .order("created_at", { ascending: false })
+        setIncomingOrders(incomingOrders || [])
+
+        // Get outgoing orders (as buyer)
+        const { data: outgoingOrders } = await supabase
+          .from("orders")
+          .select("*, product:products(*), seller:profiles(*)")
+          .eq("buyer_id", user.id)
+          .order("created_at", { ascending: false })
+        setOutgoingOrders(outgoingOrders || [])
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
   }
 
-  // Get user profile
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
-
-  // Get user's products
-  const { data: products } = await supabase
-    .from("products")
-    .select("*")
-    .eq("seller_id", user.id)
-    .order("created_at", { ascending: false })
-
-  // Get user's services
-  const { data: services } = await supabase
-    .from("services")
-    .select("*")
-    .eq("provider_id", user.id)
-    .order("created_at", { ascending: false })
-
-  // Get user's requests
-  const { data: requests } = await supabase
-    .from("requests")
-    .select("*")
-    .eq("requester_id", user.id)
-    .order("created_at", { ascending: false })
-
-  // Get incoming bookings (as provider)
-  const { data: incomingBookings } = await supabase
-    .from("bookings")
-    .select("*, service:services(*), buyer:profiles(*)")
-    .eq("provider_id", user.id)
-    .order("created_at", { ascending: false })
-
-  // Get outgoing bookings (as buyer)
-  const { data: outgoingBookings } = await supabase
-    .from("bookings")
-    .select("*, service:services(*), provider:profiles(*)")
-    .eq("buyer_id", user.id)
-    .order("created_at", { ascending: false })
-
-  // Get incoming orders (as seller)
-  const { data: incomingOrders } = await supabase
-    .from("orders")
-    .select("*, product:products(*), buyer:profiles(*)")
-    .eq("seller_id", user.id)
-    .order("created_at", { ascending: false })
-
-  // Get outgoing orders (as buyer)
-  const { data: outgoingOrders } = await supabase
-    .from("orders")
-    .select("*, product:products(*), seller:profiles(*)")
-    .eq("buyer_id", user.id)
-    .order("created_at", { ascending: false })
+  if (!user) return null
 
   // Calculate stats
   const totalListings = (products?.length || 0) + (services?.length || 0)
@@ -88,7 +133,7 @@ export default async function DashboardPage({
     ...(incomingOrders?.filter((o) => o.status === "completed") || []),
   ].reduce((sum, item) => sum + (item.total_price || 0), 0)
 
-  const defaultTab = params.tab || "overview"
+  const defaultTab = searchParams.get("tab") || "overview"
 
   const statusColors: Record<string, string> = {
     pending: "bg-yellow-100 text-yellow-800",
