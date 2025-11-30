@@ -1,4 +1,5 @@
 import { createBrowserClient } from "@supabase/ssr"
+import { SAMPLE_PRODUCTS, SAMPLE_SERVICES, SAMPLE_REQUESTS, SAMPLE_PROFILES } from "./seed-data"
 
 let client: ReturnType<typeof createBrowserClient> | null = null
 
@@ -52,8 +53,26 @@ export function createClient() {
     // Helper to get/set data for a table
     const getTableData = (table: string) => {
       if (typeof window === 'undefined') return []
-      const stored = localStorage.getItem(`skilllink_${table}`)
-      return stored ? JSON.parse(stored) : []
+      
+      // Auto-seed data if empty
+      const key = `skilllink_${table}`
+      const stored = localStorage.getItem(key)
+      
+      if (!stored) {
+        let seedData: any[] = []
+        if (table === 'products') seedData = SAMPLE_PRODUCTS
+        else if (table === 'services') seedData = SAMPLE_SERVICES
+        else if (table === 'requests') seedData = SAMPLE_REQUESTS
+        else if (table === 'profiles') seedData = SAMPLE_PROFILES
+        
+        if (seedData.length > 0) {
+          localStorage.setItem(key, JSON.stringify(seedData))
+          return seedData
+        }
+        return []
+      }
+      
+      return JSON.parse(stored)
     }
 
     const setTableData = (table: string, data: any[]) => {
