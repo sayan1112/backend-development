@@ -155,24 +155,35 @@ export default function DashboardPage() {
       <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-            <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16">
-                <AvatarFallback className="bg-foreground text-background text-xl">
-                  {profile?.full_name?.charAt(0) || user.email?.charAt(0) || "U"}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">{profile?.full_name || "Welcome"}</h1>
-                <p className="text-muted-foreground">{user.email}</p>
-              </div>
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+              <p className="text-muted-foreground">
+                Welcome back, {profile?.full_name || user?.email?.split("@")[0]}
+              </p>
             </div>
-            <Link href="/create">
-              <Button className="bg-foreground text-background hover:bg-foreground/90">
-                <Plus className="h-4 w-4 mr-2" />
-                Create Listing
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  if (confirm("This will reset all data to the sample demo data. Continue?")) {
+                    localStorage.removeItem('skilllink_products');
+                    localStorage.removeItem('skilllink_services');
+                    localStorage.removeItem('skilllink_requests');
+                    window.location.reload();
+                  }
+                }}
+              >
+                <Sparkles className="h-4 w-4 mr-2" />
+                Reset Demo Data
               </Button>
-            </Link>
+              <Link href="/create">
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Listing
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* Stats Cards */}
