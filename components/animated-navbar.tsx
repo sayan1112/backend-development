@@ -13,11 +13,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Menu, X, UserIcon, LogOut, LayoutDashboard, Plus, Sparkles } from "lucide-react"
+import { Menu, X, UserIcon, LogOut, LayoutDashboard, Plus, Sparkles, Star, ShieldCheck, AlertCircle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 export function AnimatedNavbar() {
   const [user, setUser] = useState<User | null>(null)
+  const [profile, setProfile] = useState<any>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
@@ -37,6 +38,16 @@ export function AnimatedNavbar() {
         data: { user },
       } = await supabase.auth.getUser()
       setUser(user)
+      
+      // Fetch profile data if user exists
+      if (user) {
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single()
+        setProfile(profileData)
+      }
     }
     getUser()
 
@@ -44,6 +55,17 @@ export function AnimatedNavbar() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event: string, session: any) => {
       setUser(session?.user ?? null)
+      if (session?.user) {
+        // Fetch profile when auth state changes
+        supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single()
+          .then(({ data }: { data: any }) => setProfile(data))
+      } else {
+        setProfile(null)
+      }
     })
 
     return () => subscription.unsubscribe()
@@ -130,7 +152,43 @@ export function AnimatedNavbar() {
                       <span className="max-w-[100px] truncate">{user.email?.split("@")[0]}</span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48 glass border-white/10">
+                  <DropdownMenuContent align="end" className="w-64 glass border-white/10">
+                    {/* Profile Header with Verification & Rating */}
+                    <div className="px-2 py-3 border-b border-white/10">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <p className="font-medium text-sm">{profile?.full_name || user.email?.split("@")[0]}</p>
+                          <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                        </div>
+                      </div>
+                      
+                      {/* Verification Status */}
+                      <div className="flex items-center gap-2 mt-2">
+                        {profile?.is_verified ? (
+                          <div className="flex items-center gap-1 text-xs text-green-400">
+                            <ShieldCheck className="h-3.5 w-3.5" />
+                            <span>University Verified</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1 text-xs text-amber-400">
+                            <AlertCircle className="h-3.5 w-3.5" />
+                            <span>Not Verified</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Rating */}
+                      <div className="flex items-center gap-1 mt-2">
+                        <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+                        <span className="text-xs font-medium">
+                          {profile?.rating ? profile.rating.toFixed(1) : "0.0"}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          ({profile?.total_reviews || 0} reviews)
+                        </span>
+                      </div>
+                    </div>
+                    
                     <DropdownMenuItem asChild>
                       <Link href="/dashboard" className="cursor-pointer">
                         <LayoutDashboard className="h-4 w-4 mr-2" />
@@ -143,6 +201,20 @@ export function AnimatedNavbar() {
                         Profile
                       </Link>
                     </DropdownMenuItem>
+                    
+                    {/* Verify Account Option (only if not verified) */}
+                    {!profile?.is_verified && (
+                      <>
+                        <DropdownMenuSeparator className="bg-white/10" />
+                        <DropdownMenuItem asChild>
+                          <Link href="/verify" className="cursor-pointer text-cyan-400">
+                            <ShieldCheck className="h-4 w-4 mr-2" />
+                            Verify Account
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                    
                     <DropdownMenuSeparator className="bg-white/10" />
                     <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-400">
                       <LogOut className="h-4 w-4 mr-2" />
